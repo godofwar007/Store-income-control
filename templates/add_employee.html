@@ -1,0 +1,23 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <title>Добавить сотрудника</title>
+</head>
+
+<body>
+    <h1>Добавить сотрудника</h1>
+    <form method="POST">
+        {{ form.hidden_tag() }}
+        <p>{{ form.name.label }}: {{ form.name }}</p>
+        <p>{{ form.shop_id.label }}: {{ form.shop_id }}</p>
+        <p>{{ form.hours_worked.label }}: {{ form.hours_worked }}</p>
+        <p>{{ form.salary.label }}: {{ form.salary }}</p>
+        <p>{{ form.motivation.label }}: {{ form.motivation }}</p>
+        <p><button type="submit">{{ form.submit.label }}</button></p>
+    </form>
+    <a href="{{ url_for('employees') }}">Назад к списку сотрудников</a>
+</body>
+
+</html>

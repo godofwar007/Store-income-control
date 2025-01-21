@@ -1,0 +1,33 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <title>Главная страница</title>
+</head>
+
+<body>
+    <h1>Добро пожаловать!</h1>
+
+    <!-- Кнопки выбора магазина -->
+    <h2>Выберите магазин:</h2>
+    <ul>
+        {% for shop in shops %}
+        <li>
+            <a href="{{ url_for('shop_employees', shop_id=shop.id) }}">
+                <button>{{ shop.name }} — {{ shop.address }}</button>
+            </a>
+        </li>
+        {% endfor %}
+    </ul>
+    <a href="{{ url_for('employees') }}">
+        <button>Сотрудники</button>
+    </a>
+    <!-- Общая информация по магазинам -->
+    <h2>Общая статистика:</h2>
+    <p>Общая выручка: {{ total_income }} руб.</p>
+    <p>Общие расходы: {{ total_expenses }} руб.</p>
+    <p>Общая прибыль: {{ total_profit }} руб.</p>
+</body>
+
+</html>

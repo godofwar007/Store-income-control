@@ -1,0 +1,65 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <title>Сотрудники</title>
+</head>
+
+<body>
+    <h1>Список сотрудников</h1>
+
+    <!-- Фильтр по периоду -->
+    <form method="GET" action="{{ url_for('employees') }}">
+        <label for="month">Выберите период:</label>
+        <input type="month" id="month" name="month" value="{{ selected_month }}">
+        <button type="submit">Показать</button>
+    </form>
+
+    <!-- Таблица сотрудников -->
+    <table border="1">
+        <thead>
+            <tr>
+                <th>ФИО сотрудника</th>
+                <th>Магазин</th>
+                <th>Отработанные часы</th>
+                <th>Ставка (руб.)</th>
+                <th>Мотивация (руб.)</th>
+                <th>Общая сумма зарплаты (руб.)</th>
+                <th>Действия</th>
+            </tr>
+        </thead>
+        <tbody>
+            {% for employee in employees %}
+            <tr>
+                <td contenteditable="false">{{ employee.name }}</td>
+
+                <td contenteditable="false">{{ employee.shop_id }}</td>
+                <td contenteditable="true">{{ employee.hours_worked }}</td>
+                <td contenteditable="true">{{ employee.salary }}</td>
+                <td contenteditable="true">{{ employee.motivation }}</td>
+                <td>{{ (employee.salary or 0) + (employee.motivation or 0) }}</td>
+
+                <td>
+                    <form method="POST" action="{{ url_for('delete_employee', employee_id=employee.id) }}">
+                        <button type="submit">Удалить</button>
+                    </form>
+                </td>
+            </tr>
+            {% endfor %}
+        </tbody>
+    </table>
+
+    <!-- Общая сумма зарплаты -->
+    <h3>Общая сумма заработной платы: {{ total_salary }} руб.</h3>
+
+    <!-- Кнопка добавления нового сотрудника -->
+    <a href="{{ url_for('add_employee') }}">
+        <button>Добавить сотрудника</button>
+    </a>
+    <a href="{{ url_for('index') }}">
+        <button>На главную</button>
+    </a>
+</body>
+
+</html>

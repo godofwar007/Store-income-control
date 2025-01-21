@@ -1,0 +1,40 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <title>Сотрудники {{ shop.name }}</title>
+</head>
+
+<body>
+    <h1>Сотрудники {{ shop.name }}</h1>
+    <p>Адрес: {{ shop.location }}</p>
+
+    <table border="1">
+        <thead>
+            <tr>
+                <th>Имя</th>
+                <th>Отработанные часы</th>
+                <th>Ставка</th>
+                <th>Мотивация</th>
+                <th>Общая зарплата</th>
+            </tr>
+        </thead>
+        <tbody>
+            {% for employee in employees %}
+            <tr>
+                <td>{{ employee.name }}</td>
+                <td>{{ employee.hours_worked }}</td>
+                <td>{{ employee.salary }}</td>
+                <td>{{ employee.motivation }}</td>
+                <td>{{ (employee.salary or 0) * (employee.hours_worked or 0) + (employee.motivation or 0) }}</td>
+            </tr>
+            {% endfor %}
+        </tbody>
+    </table>
+
+    <h2>Общая сумма заработной платы: {{ total_salary }} руб.</h2>
+    <a href="{{ url_for('index') }}">На главную</a>
+</body>
+
+</html>
