@@ -10,31 +10,67 @@
     <h1>Сотрудники {{ shop.name }}</h1>
     <p>Адрес: {{ shop.location }}</p>
 
+    <!-- Форма выбора месяца -->
+    <form method="GET" action="{{ url_for('shop_employees', shop_id=shop.id) }}">
+        <label for="month">Выберите месяц:</label>
+        <input type="month" id="month" name="month" value="{{ selected_month }}">
+        <button type="submit">Показать</button>
+    </form>
+
     <table border="1">
         <thead>
             <tr>
                 <th>Имя</th>
+                <th>Магазин</th>
                 <th>Отработанные часы</th>
                 <th>Ставка</th>
                 <th>Мотивация</th>
                 <th>Общая зарплата</th>
+
             </tr>
         </thead>
         <tbody>
             {% for employee in employees %}
             <tr>
-                <td>{{ employee.name }}</td>
-                <td>{{ employee.hours_worked }}</td>
-                <td>{{ employee.salary }}</td>
-                <td>{{ employee.motivation }}</td>
-                <td>{{ (employee.salary or 0) * (employee.hours_worked or 0) + (employee.motivation or 0) }}</td>
+                <form method="POST" action="{{ url_for('update_employee', employee_id=employee.id) }}">
+                    <td>
+                        <a href="{{ url_for('employee_workdays', employee_id=employee.id) }}">
+                            {{ employee.name }}
+                        </a>
+                    </td>
+                    <td>{{ employee.shop.name }}</td>
+                    <td><input type="number" name="hours_worked" value="{{ employee.hours_worked }}"></td>
+                    <td><input type="number" name="salary" value="{{ employee.salary }}"></td>
+                    <td><input type="number" name="motivation" value="{{ employee.motivation }}"></td>
+                    <td><input type="number" name="total_salary" value="{{ employee.total_salary }}"></td>
+                    <td>
+                        <button type="submit" style="background-color: rgb(31, 189, 17)">Сохранить изменения</button>
+                    </td>
+                </form>
+                <td>
+                    <form method="POST" action="{{ url_for('delete_employee', employee_id=employee.id) }}"
+                        onsubmit="return confirm('Вы уверены, что хотите удалить этого сотрудника?');">
+                        <button type="submit" style="background-color: red; color: white;">Удалить сотрудника</button>
+                    </form>
+
+                </td>
             </tr>
             {% endfor %}
         </tbody>
     </table>
 
+    <p><a href="{{ url_for('add_employee', shop_id=shop.id) }}">Добавить сотрудника</a></p>
     <h2>Общая сумма заработной платы: {{ total_salary }} руб.</h2>
-    <a href="{{ url_for('index') }}">На главную</a>
+    <p>
+        <a href="{{ url_for('shop_incomes', shop_id=shop.id) }}">Перейти к доходам магазина</a>
+    </p>
+    <p>
+        <a href="{{ url_for('shop_returns', shop_id=shop.id) }}">Перейти к возвратам магазина</a>
+    </p>
+    <p>
+        <a href="{{ url_for('shop_expenses', shop_id=shop.id) }}">Перейти к расходам магазина</a>
+    </p>
+    <a href="/">На главную</a>
 </body>
 
 </html>

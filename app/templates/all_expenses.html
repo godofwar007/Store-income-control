@@ -1,0 +1,54 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <title>Общая таблица расходов</title>
+</head>
+
+<body>
+    <h1>Общая таблица расходов</h1>
+
+    <!-- Фильтр по датам -->
+    <form method="GET" action="{{ url_for('all_expenses') }}">
+        <label for="start_date">Начальная дата:</label>
+        <input type="date" id="start_date" name="start_date" value="{{ start_date }}">
+
+        <label for="end_date">Конечная дата:</label>
+        <input type="date" id="end_date" name="end_date" value="{{ end_date }}">
+
+        <button type="submit">Фильтровать</button>
+    </form>
+
+    <!-- Общая сумма расходов -->
+    <h2>Общая сумма расходов: {{ total_amount }} руб.</h2>
+
+    <!-- Таблица расходов -->
+    <table border="1">
+        <thead>
+            <tr>
+                <th>ID</th>
+                <th>Магазин</th>
+                <th>Дата</th>
+                <th>Категория расходов</th>
+                <th>Сумма</th>
+                <th>Заметки</th>
+            </tr>
+        </thead>
+        <tbody>
+            {% for expense in expenses %}
+            <tr>
+                <td>{{ expense.id }}</td>
+                <td>{{ expense.shop.name }}</td>
+                <td>{{ expense.date }}</td>
+                <td>{{ expense.category }}</td>
+                <td>{{ expense.amount }}</td>
+                <td>{{ expense.notes or '—' }}</td>
+            </tr>
+            {% endfor %}
+        </tbody>
+    </table>
+    <a href="{{ url_for('index') }}">На главную</a>
+</body>
+
+</html>

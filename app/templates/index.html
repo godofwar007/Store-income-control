@@ -9,6 +9,9 @@
 <body>
     <h1>Добро пожаловать!</h1>
 
+    <!-- Форма фильтрации по датам -->
+
+
     <!-- Кнопки выбора магазина -->
     <h2>Выберите магазин:</h2>
     <ul>
@@ -23,10 +26,29 @@
     <a href="{{ url_for('employees') }}">
         <button>Сотрудники</button>
     </a>
+
+    <!-- Ссылки на общие таблицы -->
+    <h2>Общая таблица доходов</h2>
+    <a href="{{ url_for('all_incomes') }}">Перейти к общей таблице доходов</a>
+    <h2>Общая таблица возвратов</h2>
+    <a href="{{ url_for('all_returns') }}">Перейти к общей таблице возвратов</a>
+    <h2>Общая таблица расходов</h2>
+    <a href="{{ url_for('all_expenses') }}">Перейти к общей таблице расходов</a>
+
     <!-- Общая информация по магазинам -->
     <h2>Общая статистика:</h2>
+    <form method="GET" action="{{ url_for('index') }}">
+        <label for="start_date">Начальная дата:</label>
+        <input type="date" id="start_date" name="start_date" value="{{ start_date }}">
+
+        <label for="end_date">Конечная дата:</label>
+        <input type="date" id="end_date" name="end_date" value="{{ end_date }}">
+
+        <button type="submit">Фильтровать</button>
+    </form>
     <p>Общая выручка: {{ total_income }} руб.</p>
-    <p>Общие расходы: {{ total_expenses }} руб.</p>
+    <p>Общие расходы (включая зарплаты): {{ total_expenses }} руб.</p>
+    <p>Зарплаты сотрудников: {{ total_salary }} руб.</p>
     <p>Общая прибыль: {{ total_profit }} руб.</p>
 </body>
 

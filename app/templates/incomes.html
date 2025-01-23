@@ -1,0 +1,54 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <title>Доходы</title>
+</head>
+
+<body>
+    <h1>Общая таблица доходов</h1>
+
+    <!-- Фильтр по месяцам или диапазону дат -->
+    <form method="GET" action="{{ url_for('all_incomes') }}">
+        <label for="start_date">Начальная дата:</label>
+        <input type="date" id="start_date" name="start_date" value="{{ request.args.get('start_date', '') }}">
+
+        <label for="end_date">Конечная дата:</label>
+        <input type="date" id="end_date" name="end_date" value="{{ request.args.get('end_date', '') }}">
+
+        <button type="submit">Фильтровать</button>
+    </form>
+
+    <table border="1">
+        <thead>
+            <tr>
+                <th>ID</th>
+                <th>Магазин</th>
+                <th>Дата</th>
+                <th>Тип операции</th>
+                <th>Наименование</th>
+                <th>Сотрудник</th>
+                <th>Сумма</th>
+                <th>Заметки</th>
+            </tr>
+        </thead>
+        <tbody>
+            {% for income in incomes %}
+            <tr>
+                <td>{{ income.id }}</td>
+                <td>{{ income.shop.name }}</td>
+                <td>{{ income.date }}</td>
+                <td>{{ income.operation_type }}</td>
+                <td>{{ income.item_name }}</td>
+                <td>{{ income.employee.name }}</td>
+                <td>{{ income.amount }}</td>
+                <td>{{ income.notes or '—' }}</td>
+            </tr>
+            {% endfor %}
+        </tbody>
+    </table>
+    <a href="{{ url_for('index') }}">На главную</a>
+</body>
+
+</html>

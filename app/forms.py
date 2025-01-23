@@ -4,12 +4,12 @@ from wtforms.validators import DataRequired
 
 
 class EmployeeForm(FlaskForm):
-    name = StringField('ФИО сотрудника', validators=[DataRequired()])
-    shop_id = SelectField('Магазин', coerce=int)
-    hours_worked = IntegerField(
-        'Отработанные часы', validators=[DataRequired()])
-    salary = FloatField('Ставка (руб.)', validators=[DataRequired()])
-    motivation = FloatField('Мотивация (руб.)', validators=[DataRequired()])
+    name = StringField('Имя', validators=[DataRequired()])
+    shop_id = SelectField('Магазин', coerce=int, validators=[DataRequired()])
+    hours_worked = IntegerField('Отработанные часы', default=0)
+    salary = IntegerField('Ставка', default=0)
+    motivation = IntegerField('Мотивация', default=0)
+    total_salary = IntegerField('Общая зарплата', default=0)
     submit = SubmitField('Добавить')
 
 

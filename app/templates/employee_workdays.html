@@ -1,0 +1,46 @@
+<h1>Рабочие дни сотрудника: {{ employee.name }}</h1>
+
+<!-- Форма выбора месяца -->
+<form method="GET" action="{{ url_for('employee_workdays', employee_id=employee.id) }}">
+    <label for="month">Выберите месяц:</label>
+    <input type="month" id="month" name="month" value="{{ selected_month }}">
+    <button type="submit">Показать</button>
+</form>
+
+<!-- Таблица рабочих дней -->
+<form method="POST">
+    <table border="1">
+        <thead>
+            <tr>
+                <th>Дата</th>
+                {% for day in days %}
+                <th>{{ day.split('-')[-1] }}</th> <!-- Показываем только число -->
+                {% endfor %}
+                <th>Итого</th>
+            </tr>
+        </thead>
+        <tbody>
+            <tr>
+                <td>Работал</td>
+                {% for day in days %}
+                <td>
+                    <input type="checkbox" name="workdays" value="{{ day }}" {% if workdays.get(day) %} checked {% endif
+                        %}>
+                </td>
+                {% endfor %}
+                <td>
+                    {{ workdays.values() | sum }}
+                </td>
+            </tr>
+        </tbody>
+    </table>
+    <button type="submit">Сохранить</button>
+
+</form>
+
+<a href="{{ url_for('index') }}">На главную</a>
+
+<button onclick="history.back()"
+    style="background-color: gray; color: white; padding: 10px; border: none; cursor: pointer;">
+    Назад
+</button>

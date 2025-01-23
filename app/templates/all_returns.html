@@ -1,0 +1,55 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <title>Общая таблица возвратов</title>
+</head>
+
+<body>
+    <h1>Общая таблица возвратов</h1>
+
+    <!-- Фильтр по датам -->
+    <form method="GET" action="{{ url_for('all_returns') }}">
+        <label for="start_date">Начальная дата:</label>
+        <input type="date" id="start_date" name="start_date" value="{{ start_date }}">
+
+        <label for="end_date">Конечная дата:</label>
+        <input type="date" id="end_date" name="end_date" value="{{ end_date }}">
+
+        <button type="submit">Фильтровать</button>
+    </form>
+
+    <!-- Таблица возвратов -->
+    <table border="1">
+        <thead>
+            <tr>
+                <th>ID</th>
+                <th>Магазин</th>
+                <th>Дата</th>
+                <th>Наименование товара</th>
+                <th>Сотрудник</th>
+                <th>Сумма</th>
+                <th>Заметки</th>
+            </tr>
+        </thead>
+        <tbody>
+            {% for return_record in returns %}
+            <tr>
+                <td>{{ return_record.id }}</td>
+                <td>{{ return_record.shop.name }}</td>
+                <td>{{ return_record.date }}</td>
+                <td>{{ return_record.item_name }}</td>
+                <td>{{ return_record.employee.name }}</td>
+                <td>{{ return_record.amount }}</td>
+                <td>{{ return_record.notes or '—' }}</td>
+            </tr>
+            {% endfor %}
+        </tbody>
+    </table>
+    <h2>Общая сумма возвратов: {{ total_amount }} руб.</h2>
+    <a href="/">На главную</a>
+
+</body>
+
+</html>

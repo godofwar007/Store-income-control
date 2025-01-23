@@ -1,0 +1,79 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <title>Расходы магазина {{ shop.name }}</title>
+</head>
+
+<body>
+    <h1>Расходы магазина {{ shop.name }}</h1>
+
+    <!-- Фильтр по месяцам или диапазону дат -->
+    <form method="GET" action="{{ url_for('shop_expenses', shop_id=shop.id) }}">
+        <label for="start_date">Начальная дата:</label>
+        <input type="date" id="start_date" name="start_date" value="{{ start_date }}">
+
+        <label for="end_date">Конечная дата:</label>
+        <input type="date" id="end_date" name="end_date" value="{{ end_date }}">
+
+        <button type="submit">Фильтровать</button>
+    </form>
+
+    <!-- Таблица расходов -->
+    <table border="1">
+        <thead>
+            <tr>
+                <th>ID</th>
+                <th>Дата</th>
+                <th>Категория расходов</th>
+                <th>Сумма</th>
+                <th>Заметки</th>
+                <th>Удалить</th>
+            </tr>
+        </thead>
+        <tbody>
+            <!-- Существующие записи -->
+            {% for expense in expenses %}
+            <tr>
+                <td>{{ expense.id }}</td>
+                <td>{{ expense.date }}</td>
+                <td>{{ expense.category }}</td>
+                <td>{{ expense.amount }}</td>
+                <td>{{ expense.notes or '—' }}</td>
+                <td>
+                    <!-- Кнопка удаления -->
+                    <form method="POST"
+                        action="{{ url_for('delete_expense', shop_id=shop.id, expense_id=expense.id) }}">
+                        <button type="submit" style="color: red;">Удалить</button>
+                    </form>
+                </td>
+            </tr>
+            {% endfor %}
+
+            <!-- Новая запись -->
+            <tr>
+                <form method="POST" action="{{ url_for('shop_expenses', shop_id=shop.id) }}">
+                    <input type="hidden" name="new_record" value="true">
+                    <td>—</td>
+                    <td><input type="date" name="new_date" value="{{ datetime.utcnow().strftime('%Y-%m-%d') }}"
+                            required></td>
+                    <td><input type="text" name="new_category" required></td>
+                    <td><input type="number" step="0.01" name="new_amount" required></td>
+                    <td><input type="text" name="new_notes"></td>
+                    <td><button type="submit">Добавить</button></td>
+                </form>
+            </tr>
+        </tbody>
+    </table>
+
+    <button onclick="history.back()"
+        style="background-color: gray; color: white; padding: 10px; border: none; cursor: pointer;">
+        Назад
+    </button>
+
+    <h2>Общая сумма расходов: {{ total_amount }} руб.</h2>
+    <a href="/">На главную</a>
+</body>
+
+</html>
