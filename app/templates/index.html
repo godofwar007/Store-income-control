@@ -1,55 +1,433 @@
 <!DOCTYPE html>
-<html lang="en">
+<html lang="ru">
 
 <head>
     <meta charset="UTF-8">
     <title>Главная страница</title>
+    <!-- Пример подключения вашего стиля -->
+    <link rel="stylesheet" href="/static/styles.css">
+    <!-- Пример шрифта -->
+    <link rel="preconnect" href="https://fonts.googleapis.com" />
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+    <link href="https://fonts.googleapis.com/css2?family=Open+Sans:wght@400;600&display=swap" rel="stylesheet" />
+
+    <style>
+        header {
+            display: flex;
+            justify-content: flex-start;
+            /* Располагаем элементы влево */
+            align-items: center;
+            /* Выравнивание элементов по вертикали */
+            padding: 10px;
+            /* Отступы для красоты */
+            background-color: #f4f4f4;
+            /* Фоновый цвет для наглядности */
+        }
+
+        .logout-link {
+            text-decoration: none;
+            color: #333;
+            font-weight: bold;
+            margin-left: 0;
+            /* Сбрасываем отступы, если они есть */
+        }
+
+        /* Сброс базовых отступов */
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Open Sans', sans-serif;
+            background: linear-gradient(to right, #e9ecef, #f8f9fa);
+            color: #333;
+            line-height: 1.5;
+        }
+
+        /* Фиксированная шапка */
+        header {
+            position: fixed;
+            top: 0;
+            left: 0;
+            right: 0;
+            height: 60px;
+            /* Высота шапки */
+            background: #495057;
+            /* Тёмно-серый фон */
+            color: #fff;
+            padding: 1rem 2rem;
+            display: flex;
+            align-items: center;
+            z-index: 1000;
+            /* Чтобы шапка была поверх других элементов */
+        }
+
+        header h1 {
+            font-size: 1.8rem;
+            font-weight: 600;
+        }
+
+        /* Зафиксированная слева боковая панель */
+        .sidebar {
+            position: fixed;
+            top: 60px;
+            /* Высота шапки */
+            left: 0;
+            bottom: 0;
+            width: 300px;
+            /* Расширенная ширина */
+            background-color: #f1f3f5;
+            border-right: 1px solid #dee2e6;
+            padding: 1rem;
+            overflow-y: auto;
+            /* Добавить прокрутку, если контента много */
+            z-index: 999;
+            /* Ниже шапки */
+        }
+
+        /* Основной контент справа от боковой панели */
+        main {
+            margin-left: 300px;
+            /* Отступ слева равен ширине боковой панели */
+            padding: 80px 2rem 2rem 2rem;
+            /* Верхний отступ больше, чтобы учесть шапку */
+        }
+
+        .sidebar img {
+            max-width: 100%;
+            height: auto;
+            display: block;
+            margin-bottom: 1rem;
+        }
+
+        /* Список магазинов (вертикально) */
+        .shop-list {
+            margin-bottom: 2rem;
+        }
+
+        .shop-list a {
+            display: block;
+            margin: 0.5rem 0;
+            text-decoration: none;
+        }
+
+        .shop-list button {
+            width: 100%;
+            background-color: #9e959c;
+            color: #fcf8f8;
+            border: none;
+            padding: 0.5rem 1rem;
+            font-size: 1rem;
+            border-radius: 4px;
+            cursor: pointer;
+            text-align: left;
+            /* Текст кнопки слева */
+        }
+
+        .shop-list button:hover {
+            background-color: #b6b6b6;
+        }
+
+        /* Кнопка "Сотрудники" */
+        .employees-button {
+            display: inline-block;
+            width: 100%;
+            background-color: #ffc107;
+            color: #333;
+            border: none;
+            padding: 0.5rem 1rem;
+            font-size: 1rem;
+            border-radius: 4px;
+            cursor: pointer;
+            text-align: center;
+        }
+
+        .employees-button:hover {
+            background-color: #e0a800;
+        }
+
+        /* Блок для дат и статистики */
+        .dates-and-stats {
+            background-color: #fff;
+            border: 1px solid #dee2e6;
+            border-radius: 6px;
+            padding: 1rem;
+            margin-bottom: 1.5rem;
+        }
+
+        .date-filter {
+            margin-bottom: 1.5rem;
+            display: flex;
+            flex-wrap: wrap;
+            gap: 1rem;
+            align-items: center;
+        }
+
+        .date-filter label {
+            font-weight: 600;
+        }
+
+        .date-filter input[type="date"] {
+            padding: 0.3rem;
+            font-size: 1rem;
+            border: 1px solid #ced4da;
+            border-radius: 4px;
+        }
+
+        .date-filter button[type="submit"],
+        .reset-button {
+            background-color: #2271b6;
+            color: #fff;
+            border: none;
+            padding: 0.5rem 1rem;
+            border-radius: 4px;
+            cursor: pointer;
+            text-decoration: none;
+            /* для ссылки "Сбросить" */
+        }
+
+        .date-filter button[type="submit"]:hover,
+        .reset-button:hover {
+            background-color: #5a6860;
+        }
+
+        /* Таблицы статистики */
+        .stats-table {
+            width: 100%;
+            border-collapse: collapse;
+            margin-bottom: 1.5rem;
+            table-layout: auto;
+            /* Позволяет таблице расширяться */
+            overflow-x: auto;
+            display: block;
+        }
+
+        .stats-table th,
+        .stats-table td {
+            border: 1px solid #dee2e6;
+            padding: 0.5rem;
+            text-align: left;
+            white-space: nowrap;
+            /* Чтобы содержимое не переносилось */
+        }
+
+        .stats-table thead {
+            background-color: #f8f9fa;
+        }
+
+        /* Расходы (красный) */
+
+
+        .net-profit {
+            font-weight: 600;
+            margin-top: 1rem;
+        }
+
+        footer {
+            margin-top: 2rem;
+            padding: 1rem;
+            background: #f1f3f5;
+            text-align: center;
+            color: #495057;
+        }
+
+        /* Для обеспечения корректной прокрутки контента */
+        @media (max-width: 768px) {
+            .sidebar {
+                width: 100%;
+                height: auto;
+                position: relative;
+            }
+
+            main {
+                margin-left: 0;
+                padding: 80px 1rem 1rem 1rem;
+            }
+        }
+    </style>
+</head>
+
 </head>
 
 <body>
-    <h1>Добро пожаловать!</h1>
+    <!-- Шапка (фиксированная сверху) -->
+    <header>
+        <a href="{{ url_for('auth.logout') }}" class="logout-link">Выйти</a>
+    </header>
 
-    <!-- Форма фильтрации по датам -->
+    <!-- Зафиксированная боковая панель слева -->
+    <aside class="sidebar">
+        <!-- Логотип или любая ваша картинка -->
+        <img src="https://i.postimg.cc/vmdGKKqw/logo2.jpg" alt="Логотип">
 
-
-    <!-- Кнопки выбора магазина -->
-    <h2>Выберите магазин:</h2>
-    <ul>
-        {% for shop in shops %}
-        <li>
+        <!-- Список магазинов (вертикально) -->
+        <div class="shop-list">
+            {% for shop in shops %}
             <a href="{{ url_for('shop_employees', shop_id=shop.id) }}">
                 <button>{{ shop.name }} — {{ shop.address }}</button>
             </a>
-        </li>
-        {% endfor %}
-    </ul>
-    <a href="{{ url_for('employees') }}">
-        <button>Сотрудники</button>
-    </a>
+            {% endfor %}
+        </div>
 
-    <!-- Ссылки на общие таблицы -->
-    <h2>Общая таблица доходов</h2>
-    <a href="{{ url_for('all_incomes') }}">Перейти к общей таблице доходов</a>
-    <h2>Общая таблица возвратов</h2>
-    <a href="{{ url_for('all_returns') }}">Перейти к общей таблице возвратов</a>
-    <h2>Общая таблица расходов</h2>
-    <a href="{{ url_for('all_expenses') }}">Перейти к общей таблице расходов</a>
+        <!-- Кнопка "Сотрудники" -->
+        <a href="{{ url_for('employees') }}">
+            <button class="employees-button">Сотрудники</button>
+        </a>
 
-    <!-- Общая информация по магазинам -->
-    <h2>Общая статистика:</h2>
-    <form method="GET" action="{{ url_for('index') }}">
-        <label for="start_date">Начальная дата:</label>
-        <input type="date" id="start_date" name="start_date" value="{{ start_date }}">
+    </aside>
 
-        <label for="end_date">Конечная дата:</label>
-        <input type="date" id="end_date" name="end_date" value="{{ end_date }}">
+    <!-- Основной контент (справа от боковой панели) -->
+    <main>
+        <section class="dates-and-stats">
+            <!-- Форма для фильтра по датам + кнопка "Сбросить" -->
+            <div class="date-filter">
+                <form method="GET" action="{{ url_for('index') }}">
+                    <label for="start_date">Начальная дата:</label>
+                    <input type="date" id="start_date" name="start_date" value="{{ start_date }}">
 
-        <button type="submit">Фильтровать</button>
-    </form>
-    <p>Общая выручка: {{ total_income }} руб.</p>
-    <p>Общие расходы (включая зарплаты): {{ total_expenses }} руб.</p>
-    <p>Зарплаты сотрудников: {{ total_salary }} руб.</p>
-    <p>Общая прибыль: {{ total_profit }} руб.</p>
+                    <label for="end_date">Конечная дата:</label>
+                    <input type="date" id="end_date" name="end_date" value="{{ end_date }}">
+
+                    <button type="submit">Фильтровать</button>
+                    <button type="button" class="reset-button"
+                        onclick="window.location.href='{{ url_for('index') }}'">Сбросить фильтр</button>
+                </form>
+
+                <!-- Кнопка "Сбросить" (ссылка на index без параметров) -->
+
+            </div>
+
+            <!-- 1. Таблица расходов -->
+            <h2>Расходы магазинов</h2>
+            <table class="stats-table">
+                <thead>
+                    <tr>
+                        <th>Статья расхода</th>
+                        {% for day in days_range %}
+                        <!-- Убедитесь, что days_range содержит уникальные даты -->
+                        <th>{{ day|format_date }}</th>
+                        {% endfor %}
+                        <th>Итого (за период)</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <tr>
+                        <td>Закупка</td>
+                        {% for day in days_range %}
+                        <!-- Используйте суммированные значения для каждой даты -->
+                        <td class="expense-text">{{ expenses.purchase[day] or 0 }}</td>
+                        {% endfor %}
+                        <td class="expense-text">{{ expenses_totals.purchase }} руб.</td>
+                    </tr>
+                    <tr>
+                        <td>Нужды магазина</td>
+                        {% for day in days_range %}
+                        <td class="expense-text">{{ expenses.store_needs[day] or 0 }}</td>
+                        {% endfor %}
+                        <td class="expense-text">{{ expenses_totals.store_needs }} руб.</td>
+                    </tr>
+                    <tr>
+                        <td>Зарплата</td>
+                        {% for day in days_range %}
+                        <td class="expense-text">{{ expenses.salary[day] or 0 }}</td>
+                        {% endfor %}
+                        <td class="expense-text">{{ expenses_totals.salary }} руб.</td>
+                    </tr>
+                    <tr>
+                        <td>Аренда</td>
+                        {% for day in days_range %}
+                        <td class="expense-text">{{ expenses.rent[day] or 0 }}</td>
+                        {% endfor %}
+                        <td class="expense-text">{{ expenses_totals.rent }} руб.</td>
+                    </tr>
+                    <tr>
+                        <td>Ремонт</td>
+                        {% for day in days_range %}
+                        <td class="expense-text">{{ expenses.repair[day] or 0 }}</td>
+                        {% endfor %}
+                        <td class="expense-text">{{ expenses_totals.repair }} руб.</td>
+                    </tr>
+                    <tr>
+                        <td>Маркетинг</td>
+                        {% for day in days_range %}
+                        <td class="expense-text">{{ expenses.marketing[day] or 0 }}</td>
+                        {% endfor %}
+                        <td class="expense-text">{{ expenses_totals.marketing }} руб.</td>
+                    </tr>
+                    <tr>
+                        <td><strong>Всего расходов</strong></td>
+                        {% for day in days_range %}
+                        <td class="expense-text">{{ expenses.total_expenses_all[day] or 0 }}</td>
+                        {% endfor %}
+                        <td class="expense-text"><strong>{{ expenses_totals.total_expenses_all }} руб.</strong></td>
+                    </tr>
+                </tbody>
+            </table>
+
+            <!-- 2. Таблица продаж и возвратов -->
+            <h2>Продажи и возвраты</h2>
+            <table class="stats-table">
+                <thead>
+                    <tr>
+                        <th>Показатель</th>
+                        {% for day in days_range %}
+                        <th>{{ day|format_date }}</th>
+                        {% endfor %}
+                        <th>Итого (за период)</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <tr>
+                        <td>Сумма продаж (розница)</td>
+                        {% for day in days_range %}
+                        <td class="income-text">{{ sales_returns.retail_sale_amount[day] or 0 }}</td>
+
+                        {% endfor %}
+                        <td class="income-text">{{ sales_returns_totals.retail_sale_amount }} руб.</td>
+                    </tr>
+                    <tr>
+                        <td>Сумма возвратов</td>
+                        {% for day in days_range %}
+                        <td class="expense-text">{{ sales_returns.return_amount[day] or 0 }}</td>
+                        {% endfor %}
+                        <td class="expense-text">{{ sales_returns_totals.return_amount }} руб.</td>
+                    </tr>
+                    <tr>
+                        <td>Чистые продажи (розница - возвраты)</td>
+                        {% for day in days_range %}
+                        <td>{{ sales_returns.net_sales[day] or 0 }}</td>
+                        {% endfor %}
+                        <td>{{ sales_returns_totals.net_sales }} руб.</td>
+                    </tr>
+                    <tr>
+                        <td>Сумма продаж по закупке (опт)</td>
+                        {% for day in days_range %}
+                        <td>{{ sales_returns.wholesale_sale_amount[day] or 0 }}</td>
+                        {% endfor %}
+                        <td>{{ sales_returns_totals.wholesale_sale_amount }} руб.</td>
+                    </tr>
+                    <tr>
+                        <td>Маржинальная прибыль (розница - опт)</td>
+                        {% for day in days_range %}
+                        <td class="income-text">{{ sales_returns.margin[day] or 0 }}</td>
+                        {% endfor %}
+                        <td class="income-text">{{ sales_returns_totals.margin }} руб.</td>
+                    </tr>
+                </tbody>
+            </table>
+
+            <!-- Итоговая прибыль -->
+            <h2 class="net-profit">
+                <strong>Итоговая прибыль (чистые продажи - все расходы):</strong>
+                <span class="income-text">{{ net_profit }} руб.</span>
+            </h2>
+        </section>
+    </main>
+
+    <!-- Подвал (если нужен) -->
+
 </body>
 
 </html>

@@ -1,0 +1,321 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <title>Продажи и возвраты</title>
+    <!-- Существующая ссылка на стили (оставляем, если нужно) -->
+    <link rel="stylesheet" href="/static/styles.css">
+
+    <!-- Подключаем шрифт (Open Sans), как и в предыдущих шаблонах -->
+    <link rel="preconnect" href="https://fonts.googleapis.com" />
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+    <link href="https://fonts.googleapis.com/css2?family=Open+Sans:wght@400;600&display=swap" rel="stylesheet" />
+
+    <style>
+        /* Сброс базовых отступов */
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        /* Глобальные стили для фона, шрифта */
+        body {
+            font-family: 'Open Sans', sans-serif;
+            background: linear-gradient(to right, #e9ecef, #f8f9fa);
+            color: #333;
+            line-height: 1.5;
+        }
+
+        /* Контейнер с шириной 95% окна */
+        main {
+            max-width: 95vw;
+            margin: 2rem auto;
+            padding: 0 1rem;
+        }
+
+        h1 {
+            text-align: center;
+            margin-bottom: 1rem;
+            font-size: 1.8rem;
+            font-weight: 600;
+        }
+
+        /* Стили формы фильтрации */
+        form {
+            margin-bottom: 1.5rem;
+        }
+
+        form label {
+            font-weight: 600;
+            margin-right: 0.5rem;
+        }
+
+        form input[type="date"] {
+            padding: 0.3rem;
+            border: 1px solid #ced4da;
+            border-radius: 4px;
+            margin-right: 0.5rem;
+        }
+
+        /* Кнопки в формах и кнопки на странице */
+        form button[type="submit"],
+        button[type="button"] {
+            background-color: #78c478;
+            /* менее яркий зелёный */
+            color: #fff;
+            border: none;
+            padding: 0.5rem 1rem;
+            border-radius: 4px;
+            cursor: pointer;
+            margin-left: 0.5rem;
+        }
+
+        form button[type="submit"]:hover,
+        button[type="button"]:hover {
+            background-color: #5a6268;
+        }
+
+        /* «Удалить» (красные кнопки) переопределяем инлайн-стиль через !important */
+        button[style*="background-color: red"] {
+            background-color: #dc3545 !important;
+            color: #fff !important;
+            border: none !important;
+            padding: 0.5rem 1rem !important;
+            border-radius: 4px !important;
+            cursor: pointer !important;
+        }
+
+        button[style*="background-color: red"]:hover {
+            background-color: #c82333 !important;
+        }
+
+        /* Таблица в едином стиле */
+        table {
+            width: 100%;
+            border-collapse: collapse;
+            margin-bottom: 1.5rem;
+        }
+
+        /* Учитывая border="1" в HTML, стилизуем обводку */
+        table,
+        th,
+        td {
+            border: 1px solid #dee2e6 !important;
+        }
+
+        th,
+        td {
+            padding: 0.5rem;
+            text-align: left;
+            vertical-align: middle;
+        }
+
+        thead {
+            background-color: #f1f3f5;
+        }
+
+        tfoot td {
+            background-color: #f8f9fa;
+            font-weight: 600;
+        }
+
+        /* Инпуты внутри таблицы */
+        td input[type="text"],
+        td input[type="number"],
+        td input[type="date"] {
+            padding: 0.3rem;
+            margin: 0;
+            border: 1px solid #ced4da;
+            border-radius: 4px;
+            font-size: 0.9rem;
+            width: 100%;
+        }
+
+        /* Итоговые суммы */
+        h2 {
+            margin-top: 1.5rem;
+            margin-bottom: 1rem;
+            font-weight: 600;
+            color: #212529;
+        }
+
+        p {
+            margin-bottom: 0.5rem;
+        }
+
+        /* Ссылки */
+        a {
+            color: #007bff;
+            text-decoration: none;
+            margin-right: 1rem;
+        }
+
+        a:hover {
+            text-decoration: underline;
+        }
+    </style>
+
+    <!-- Скрипты (оставляем, как есть) -->
+    <script>
+        // Удаление строки по AJAX (для существующих записей)
+        function deleteRow(button, recordId) {
+            // Если ID нет (новая строка), то просто убираем строку
+            if (!recordId) {
+                button.closest('tr').remove();
+                return;
+            }
+            if (!confirm("Вы действительно хотите удалить запись с ID " + recordId + "?")) {
+                return;
+            }
+            const url = `{{ url_for('delete_sales_return', shop_id=shop_id, record_id=0) }}`.replace('/0', '/' + recordId);
+            fetch(url, { method: 'POST' })
+                .then(response => {
+                    if (response.ok) {
+                        button.closest('tr').remove();
+                    } else {
+                        alert("Ошибка при удалении записи. Статус: " + response.status);
+                    }
+                })
+                .catch(error => {
+                    console.error("Ошибка при удалении записи:", error);
+                    alert("Ошибка при удалении записи: " + error);
+                });
+        }
+
+        // Добавление новой строки (без ID)
+        function addRow() {
+            const tableBody = document.getElementById('sales-returns-table-body');
+            const newRowIndex = tableBody.children.length;
+            const today = new Date().toISOString().split('T')[0];
+
+            const newRow = document.createElement('tr');
+            newRow.innerHTML = `
+                <td>—</td>
+                <td>
+                    <input type="date" name="date_${newRowIndex}" value="${today}">
+                </td>
+                <td>
+                    <input type="text" name="sale_${newRowIndex}" placeholder="Наименование">
+                </td>
+                <td>
+                    <input type="text" name="return_item_${newRowIndex}" placeholder="Наименование">
+                </td>
+                <td>
+                    <input type="number" step="0.01" name="retail_sale_amount_${newRowIndex}" placeholder="Сумма продаж в розницу">
+                </td>
+                <td>
+                    <input type="number" step="0.01" name="wholesale_sale_amount_${newRowIndex}" placeholder="Сумма продаж по закупке">
+                </td>
+                <td>
+                    <input type="number" step="0.01" name="return_amount_${newRowIndex}" placeholder="Сумма возвратов">
+                </td>
+                <td>
+                    <button type="button" style="background-color: red; color: white;" onclick="deleteRow(this, null)">Удалить</button>
+                </td>
+                <input type="hidden" name="is_new_${newRowIndex}" value="true">
+            `;
+            tableBody.appendChild(newRow);
+        }
+    </script>
+</head>
+
+<body>
+    <main>
+        <h1>Продажи и возвраты магазина {{ shop_id }}</h1>
+
+        <!-- Форма фильтрации -->
+        <form method="GET" action="{{ url_for('shop_sales_returns', shop_id=shop_id) }}">
+            <label for="start_date">С начала:</label>
+            <input type="date" id="start_date" name="start_date" value="{{ start_date }}">
+            <label for="end_date">По:</label>
+            <input type="date" id="end_date" name="end_date" value="{{ end_date }}">
+            <button type="submit">Применить</button>
+        </form>
+
+        <!-- Форма редактирования и добавления -->
+        <form method="POST" action="{{ url_for('shop_sales_returns', shop_id=shop_id) }}">
+            <table border="1">
+                <thead>
+                    <tr>
+                        <th>ID</th>
+                        <th>Дата</th>
+                        <th>Продажа</th>
+                        <th>Возврат</th>
+                        <th>Сумма продаж в розницу</th>
+                        <th>Сумма продаж по закупке</th>
+                        <th>Сумма возвратов</th>
+                        <th>Действия</th>
+                    </tr>
+                </thead>
+                <tbody id="sales-returns-table-body">
+                    {% for record in records %}
+                    <tr>
+                        <td>
+                            <!-- Скрытое поле с ID для POST-запроса -->
+                            <input type="hidden" name="id_{{ loop.index0 }}" value="{{ record.id }}">
+                            {{ record.id }}
+                        </td>
+                        <td>
+                            <input type="date" name="date_{{ loop.index0 }}"
+                                value="{{ record.date.strftime('%Y-%m-%d') if record.date else '' }}">
+                        </td>
+                        <td>
+                            <input type="text" name="sale_{{ loop.index0 }}" value="{{ record.sale or '' }}">
+                        </td>
+                        <td>
+                            <input type="text" name="return_item_{{ loop.index0 }}"
+                                value="{{ record.return_item or '' }}">
+                        </td>
+                        <td>
+                            <input type="number" step="0.01" name="retail_sale_amount_{{ loop.index0 }}"
+                                value="{{ record.retail_sale_amount if record.retail_sale_amount else '' }}">
+                        </td>
+                        <td>
+                            <input type="number" step="0.01" name="wholesale_sale_amount_{{ loop.index0 }}"
+                                value="{{ record.wholesale_sale_amount if record.wholesale_sale_amount else '' }}">
+                        </td>
+                        <td>
+                            <input type="number" step="0.01" name="return_amount_{{ loop.index0 }}"
+                                value="{{ record.return_amount if record.return_amount else '' }}">
+                        </td>
+                        <td>
+                            <!-- Кнопка Удалить, AJAX-вызов deleteRow -->
+                            <button type="button" style="background-color: red; color: white;"
+                                onclick="deleteRow(this, {{ record.id }})">
+                                Удалить
+                            </button>
+                        </td>
+                    </tr>
+                    {% endfor %}
+                </tbody>
+                <tfoot>
+                    <tr>
+                        <td colspan="4" style="text-align: right; font-weight: bold;">Итоги:</td>
+                        <td>{{ totals.retail_sale_amount }} руб.</td>
+                        <td>{{ totals.wholesale_sale_amount }} руб.</td>
+                        <td>{{ totals.return_amount }} руб.</td>
+                        <td></td>
+                    </tr>
+                </tfoot>
+            </table>
+            <button type="button" onclick="addRow()">Добавить запись</button>
+            <button type="submit">Сохранить изменения</button>
+        </form>
+
+        <!-- Итоговые суммы -->
+        <h2>Итоговые суммы:</h2>
+        <p>Сумма продаж в розницу: {{ totals.retail_sale_amount }} руб.</p>
+        <p>Сумма продаж по закупочной цене: {{ totals.wholesale_sale_amount }} руб.</p>
+        <p>Сумма возвратов: {{ totals.return_amount }} руб.</p>
+        <h3>Доход: {{ totals.retail_sale_amount - totals.wholesale_sale_amount - totals.return_amount }} руб.</h3>
+
+        <p>
+            <a href="/">На главную</a>
+            <a href="{{ url_for('shop_employees', shop_id=shop_id) }}">← Обратно в магазин</a>
+        </p>
+    </main>
+</body>
+
+</html>

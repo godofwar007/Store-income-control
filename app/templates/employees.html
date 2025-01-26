@@ -1,10 +1,147 @@
 <!DOCTYPE html>
 <html lang="en">
+<link rel="stylesheet" href="/static/styles.css">
 
 <head>
     <meta charset="UTF-8">
     <title>Сотрудники</title>
 </head>
+<style>
+    /* Сброс базовых отступов */
+    * {
+        margin: 0;
+        padding: 0;
+        box-sizing: border-box;
+    }
+
+    body {
+        font-family: 'Open Sans', sans-serif;
+        background: linear-gradient(to right, #e9ecef, #f8f9fa);
+        color: #333;
+        line-height: 1.5;
+    }
+
+    /* Основной контейнер заполняет 95% ширины экрана */
+    main {
+        max-width: 95vw;
+        margin: 2rem auto;
+        padding: 0 1rem;
+    }
+
+    h1 {
+        margin-top: 1rem;
+        text-align: center;
+        font-size: 1.8rem;
+        font-weight: 600;
+    }
+
+    /* Фильтр дат (GET-форма) */
+    form {
+        margin-bottom: 1.5rem;
+    }
+
+    form label {
+        font-weight: 600;
+        margin-right: 0.5rem;
+    }
+
+    form input[type="date"] {
+        padding: 0.3rem;
+        border: 1px solid #ced4da;
+        border-radius: 4px;
+    }
+
+    /* Кнопки в формах */
+    form button[type="submit"],
+    button[type="button"] {
+        background-color: #78c478;
+        /* менее яркий зелёный */
+        color: #fff;
+        border: none;
+        padding: 0.5rem 1rem;
+        border-radius: 4px;
+        cursor: pointer;
+        margin-left: 0.5rem;
+    }
+
+    form button[type="submit"]:hover,
+    button[type="button"]:hover {
+        background-color: #5a6268;
+    }
+
+    /* Удалить (красные кнопки) переопределяем через !important */
+    button[style*="background-color: red"] {
+        background-color: #dc3545 !important;
+        color: #fff !important;
+        border: none !important;
+        border-radius: 4px !important;
+        padding: 0.5rem 1rem !important;
+        cursor: pointer !important;
+    }
+
+    button[style*="background-color: red"]:hover {
+        background-color: #c82333 !important;
+    }
+
+    /* Таблица */
+    table {
+        width: 100%;
+        border-collapse: collapse;
+        margin-bottom: 1.5rem;
+    }
+
+    table,
+    th,
+    td {
+        border: 1px solid #dee2e6 !important;
+        /* переопределяем border="1" */
+    }
+
+    th,
+    td {
+        padding: 0.5rem;
+        text-align: left;
+        vertical-align: middle;
+    }
+
+    thead {
+        background-color: #f1f3f5;
+    }
+
+    /* Инпуты внутри таблицы */
+    td input[type="text"],
+    td input[type="number"],
+    td input[type="date"] {
+        width: 100%;
+        padding: 0.3rem;
+        margin: 0;
+        border: 1px solid #ced4da;
+        border-radius: 4px;
+        font-size: 0.9rem;
+    }
+
+    /* Заголовки и отступы подвала */
+    h2 {
+        margin: 1.5rem 0 1rem;
+        font-weight: 600;
+        color: #212529;
+    }
+
+    p {
+        margin-bottom: 0.5rem;
+    }
+
+    /* Ссылки */
+    a {
+        color: #007bff;
+        text-decoration: none;
+        margin-right: 1rem;
+    }
+
+    a:hover {
+        text-decoration: underline;
+    }
+</style>
 
 <body>
     <!-- Форма выбора месяца -->
@@ -18,14 +155,39 @@
     <table border="1">
         <thead>
             <tr>
-                <th>Имя</th>
-                <th>Магазин</th>
-                <th>Отработанные часы</th>
-                <th>Ставка</th>
-                <th>Мотивация</th>
-                <th>Зарплата</th>
+                <th>
+                    Имя
+                    <a href="?month={{ selected_month }}&sort=name&order=asc">↑</a>
+                    <a href="?month={{ selected_month }}&sort=name&order=desc">↓</a>
+                </th>
+                <th>
+                    Магазин
+                    <a href="?month={{ selected_month }}&sort=shop&order=asc">↑</a>
+                    <a href="?month={{ selected_month }}&sort=shop&order=desc">↓</a>
+                </th>
+                <th>
+                    Отработанные часы
+                    <a href="?month={{ selected_month }}&sort=hours_worked&order=asc">↑</a>
+                    <a href="?month={{ selected_month }}&sort=hours_worked&order=desc">↓</a>
+                </th>
+                <th>
+                    Ставка
+                    <a href="?month={{ selected_month }}&sort=salary&order=asc">↑</a>
+                    <a href="?month={{ selected_month }}&sort=salary&order=desc">↓</a>
+                </th>
+                <th>
+                    Мотивация
+                    <a href="?month={{ selected_month }}&sort=motivation&order=asc">↑</a>
+                    <a href="?month={{ selected_month }}&sort=motivation&order=desc">↓</a>
+                </th>
+                <th>
+                    Зарплата
+                    <a href="?month={{ selected_month }}&sort=total_salary&order=asc">↑</a>
+                    <a href="?month={{ selected_month }}&sort=total_salary&order=desc">↓</a>
+                </th>
             </tr>
         </thead>
+
         <tbody>
             {% for employee in employees %}
             <tr>

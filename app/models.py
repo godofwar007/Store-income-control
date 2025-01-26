@@ -1,5 +1,7 @@
 from app import db
 from datetime import datetime
+from flask_bcrypt import Bcrypt
+from flask_login import UserMixin
 # Модель для магазинов
 
 
@@ -83,3 +85,58 @@ class Expense(db.Model):
 
 # flask db migrate -m "Исправление"
 # flask db upgrade
+
+
+class SalesReturn(db.Model):
+    __tablename__ = 'sales_returns'
+    id = db.Column(db.Integer, primary_key=True)
+    shop_id = db.Column(db.Integer, nullable=False)  # Привязка к магазину
+    sale = db.Column(db.String(255), nullable=True)  # Продажа (текст)
+    return_item = db.Column(db.String(255), nullable=True)  # Возврат (текст)
+    retail_sale_amount = db.Column(
+        db.Float, nullable=True)  # Сумма продаж в розницу
+    # Сумма продаж по закупочной цене
+    wholesale_sale_amount = db.Column(db.Float, nullable=True)
+    return_amount = db.Column(db.Float, nullable=True)  # Сумма возвратов
+    date = db.Column(db.Date, default=datetime.utcnow)  # Дата
+    created_at = db.Column(
+        db.DateTime, default=datetime.utcnow)  # Время создания
+
+
+class ShopExpense(db.Model):
+    __tablename__ = 'shop_expenses'
+    id = db.Column(db.Integer, primary_key=True)
+    shop_id = db.Column(db.Integer, nullable=False)  # Привязка к магазину
+    purchase_desc = db.Column(
+        db.String(255), nullable=True)  # Описание закупки
+    purchase = db.Column(db.Float, nullable=True)  # Сумма закупки
+    store_needs_desc = db.Column(
+        db.String(255), nullable=True)  # Описание нужд магазина
+    store_needs = db.Column(db.Float, nullable=True)  # Сумма нужд магазина
+    salary_desc = db.Column(db.String(255), nullable=True)  # Описание зарплаты
+    salary = db.Column(db.Float, nullable=True)  # Сумма зарплаты
+    rent_desc = db.Column(db.String(255), nullable=True)  # Описание аренды
+    rent = db.Column(db.Float, nullable=True)  # Сумма аренды
+    repair_desc = db.Column(db.String(255), nullable=True)  # Описание ремонта
+    repair = db.Column(db.Float, nullable=True)  # Сумма ремонта
+    marketing_desc = db.Column(
+        db.String(255), nullable=True)  # Описание маркетинга
+    marketing = db.Column(db.Float, nullable=True)  # Сумма маркетинга
+    date = db.Column(db.Date, default=datetime.utcnow)  # Дата
+
+
+# авторизация
+bcrypt = Bcrypt()
+
+
+class User(UserMixin, db.Model):  # Наследуемся от UserMixin
+    id = db.Column(db.Integer, primary_key=True)
+    username = db.Column(db.String(50), unique=True, nullable=False)
+    password_hash = db.Column(db.Text, nullable=False)
+    # Уровень доступа ("admin", "shop_manager")
+    access_level = db.Column(db.String(50), nullable=False)
+    # NULL = полный доступ, иначе ID магазина
+    shop_id = db.Column(db.Integer, nullable=True)
+
+    def verify_password(self, password):
+        return bcrypt.check_password_hash(self.password_hash, password)

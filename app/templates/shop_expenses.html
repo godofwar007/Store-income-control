@@ -1,5 +1,6 @@
 <!DOCTYPE html>
 <html lang="en">
+<link rel="stylesheet" href="/static/styles.css">
 
 <head>
     <meta charset="UTF-8">
@@ -75,5 +76,7 @@
     <h2>Общая сумма расходов: {{ total_amount }} руб.</h2>
     <a href="/">На главную</a>
 </body>
+<a href="{{ url_for('shop_employees', shop_id=shop_id) }}" style="text-decoration: none; color: blue;">
+    ← Обратно в магазин</a>
 
 </html>

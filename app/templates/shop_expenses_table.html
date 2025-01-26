@@ -1,0 +1,321 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <title>Расходы</title>
+    <link rel="stylesheet" href="/static/styles.css">
+
+    <!-- Шрифты и стили для единообразия -->
+    <link rel="preconnect" href="https://fonts.googleapis.com" />
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+    <link href="https://fonts.googleapis.com/css2?family=Open+Sans:wght@400;600&display=swap" rel="stylesheet" />
+
+    <style>
+        /* Сброс базовых отступов */
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Open Sans', sans-serif;
+            background: linear-gradient(to right, #e9ecef, #f8f9fa);
+            color: #333;
+            line-height: 1.5;
+        }
+
+        /* Основной контейнер заполняет 95% ширины экрана */
+        main {
+            max-width: 95vw;
+            margin: 2rem auto;
+            padding: 0 1rem;
+        }
+
+        h1 {
+            margin-top: 1rem;
+            text-align: center;
+            font-size: 1.8rem;
+            font-weight: 600;
+        }
+
+        /* Фильтр дат (GET-форма) */
+        form {
+            margin-bottom: 1.5rem;
+        }
+
+        form label {
+            font-weight: 600;
+            margin-right: 0.5rem;
+        }
+
+        form input[type="date"] {
+            padding: 0.3rem;
+            border: 1px solid #ced4da;
+            border-radius: 4px;
+        }
+
+        /* Кнопки в формах */
+        form button[type="submit"],
+        button[type="button"] {
+            background-color: #78c478;
+            /* менее яркий зелёный */
+            color: #fff;
+            border: none;
+            padding: 0.5rem 1rem;
+            border-radius: 4px;
+            cursor: pointer;
+            margin-left: 0.5rem;
+        }
+
+        form button[type="submit"]:hover,
+        button[type="button"]:hover {
+            background-color: #5a6268;
+        }
+
+        /* Удалить (красные кнопки) переопределяем через !important */
+        button[style*="background-color: red"] {
+            background-color: #dc3545 !important;
+            color: #fff !important;
+            border: none !important;
+            border-radius: 4px !important;
+            padding: 0.5rem 1rem !important;
+            cursor: pointer !important;
+        }
+
+        button[style*="background-color: red"]:hover {
+            background-color: #c82333 !important;
+        }
+
+        /* Таблица */
+        table {
+            width: 100%;
+            border-collapse: collapse;
+            margin-bottom: 1.5rem;
+        }
+
+        table,
+        th,
+        td {
+            border: 1px solid #dee2e6 !important;
+            /* переопределяем border="1" */
+        }
+
+        th,
+        td {
+            padding: 0.5rem;
+            text-align: left;
+            vertical-align: middle;
+        }
+
+        thead {
+            background-color: #f1f3f5;
+        }
+
+        /* Инпуты внутри таблицы */
+        td input[type="text"],
+        td input[type="number"],
+        td input[type="date"] {
+            width: 100%;
+            padding: 0.3rem;
+            margin: 0;
+            border: 1px solid #ced4da;
+            border-radius: 4px;
+            font-size: 0.9rem;
+        }
+
+        /* Заголовки и отступы подвала */
+        h2 {
+            margin: 1.5rem 0 1rem;
+            font-weight: 600;
+            color: #212529;
+        }
+
+        p {
+            margin-bottom: 0.5rem;
+        }
+
+        /* Ссылки */
+        a {
+            color: #007bff;
+            text-decoration: none;
+            margin-right: 1rem;
+        }
+
+        a:hover {
+            text-decoration: underline;
+        }
+    </style>
+
+    <!-- Скрипты (оставляем без изменений) -->
+    <script>
+        function addRow() {
+            const tableBody = document.getElementById('expenses-table-body');
+            const rowCountInput = document.getElementById('row_count');
+
+            let currentCount = parseInt(rowCountInput.value, 10);
+            let newIndex = currentCount;
+            rowCountInput.value = currentCount + 1;
+
+            const today = new Date().toISOString().split('T')[0];
+            const newRow = document.createElement('tr');
+            newRow.innerHTML = `
+                <td>
+                    — 
+                    <input type="hidden" name="id_${newIndex}" value="">
+                </td>
+                <td><input type="date" name="date_${newIndex}" value="${today}"></td>
+                <td><input type="text" name="purchase_desc_${newIndex}" placeholder="Описание закупки"></td>
+                <td><input type="number" name="purchase_${newIndex}" placeholder="Сумма закупки"></td>
+                <td><input type="text" name="store_needs_desc_${newIndex}" placeholder="Описание нужд магазина"></td>
+                <td><input type="number" name="store_needs_${newIndex}" placeholder="Сумма нужд магазина"></td>
+                <td><input type="text" name="salary_desc_${newIndex}" placeholder="Описание зарплаты"></td>
+                <td><input type="number" name="salary_${newIndex}" placeholder="Сумма зарплаты"></td>
+                <td><input type="text" name="rent_desc_${newIndex}" placeholder="Описание аренды"></td>
+                <td><input type="number" name="rent_${newIndex}" placeholder="Сумма аренды"></td>
+                <td><input type="text" name="repair_desc_${newIndex}" placeholder="Описание ремонта"></td>
+                <td><input type="number" name="repair_${newIndex}" placeholder="Сумма ремонта"></td>
+                <td><input type="text" name="marketing_desc_${newIndex}" placeholder="Описание маркетинга"></td>
+                <td><input type="number" name="marketing_${newIndex}" placeholder="Сумма маркетинга"></td>
+                <td>
+                    <button type="button" style="background-color: red; color: white;" onclick="deleteRow(this)">Удалить</button>
+                </td>
+            `;
+            tableBody.appendChild(newRow);
+        }
+
+        function deleteRow(button) {
+            const row = button.closest('tr');
+            row.remove();
+        }
+
+        function deleteRowFromServer(button, deleteUrl) {
+            if (confirm('Вы уверены, что хотите удалить эту строку?')) {
+                fetch(deleteUrl, { method: 'POST' })
+                    .then(response => {
+                        if (response.ok) {
+                            const row = button.closest('tr');
+                            row.remove();
+                        } else {
+                            alert('Ошибка при удалении строки.');
+                        }
+                    })
+                    .catch(error => {
+                        console.error('Ошибка:', error);
+                        alert('Произошла ошибка.');
+                    });
+            }
+        }
+    </script>
+</head>
+
+<body>
+    <!-- Не трогаем существующий H1 -->
+    <h1>Расходы магазина {{ shop_id }}</h1>
+
+    <!-- Оборачиваем основную часть в <main> с max-width:95vw -->
+    <main>
+        <form method="GET" action="{{ url_for('shop_expenses_table', shop_id=shop_id) }}">
+            <label for="start_date">С начала:</label>
+            <input type="date" id="start_date" name="start_date" value="{{ start_date }}">
+            <label for="end_date">По:</label>
+            <input type="date" id="end_date" name="end_date" value="{{ end_date }}">
+            <button type="submit">Применить</button>
+        </form>
+
+        <form method="POST" action="{{ url_for('shop_expenses_table', shop_id=shop_id) }}">
+            <!-- Скрытое поле для общего числа строк -->
+            <input type="hidden" id="row_count" name="row_count" value="{{ expenses|length }}">
+
+            <table border="1">
+                <thead>
+                    <tr>
+                        <th rowspan="2">ID</th>
+                        <th rowspan="2">Дата</th>
+                        <th colspan="2">Закупка</th>
+                        <th colspan="2">Нужды магазина</th>
+                        <th colspan="2">Зарплаты</th>
+                        <th colspan="2">Аренда</th>
+                        <th colspan="2">Ремонт</th>
+                        <th colspan="2">Маркетинг</th>
+                        <th rowspan="2">Удалить</th>
+                    </tr>
+                    <tr>
+                        <th>Описание</th>
+                        <th>Сумма</th>
+                        <th>Описание</th>
+                        <th>Сумма</th>
+                        <th>Описание</th>
+                        <th>Сумма</th>
+                        <th>Описание</th>
+                        <th>Сумма</th>
+                        <th>Описание</th>
+                        <th>Сумма</th>
+                        <th>Описание</th>
+                        <th>Сумма</th>
+                    </tr>
+                </thead>
+                <tbody id="expenses-table-body">
+                    {% for expense in expenses %}
+                    <tr>
+                        <td>
+                            {{ expense.id }}
+                            <input type="hidden" name="id_{{ loop.index0 }}" value="{{ expense.id }}">
+                        </td>
+                        <td><input type="date" name="date_{{ loop.index0 }}" value="{{ expense.date or '' }}"></td>
+                        <td><input type="text" name="purchase_desc_{{ loop.index0 }}"
+                                value="{{ expense.purchase_desc or '' }}"></td>
+                        <td><input type="number" name="purchase_{{ loop.index0 }}" value="{{ expense.purchase or '' }}">
+                        </td>
+                        <td><input type="text" name="store_needs_desc_{{ loop.index0 }}"
+                                value="{{ expense.store_needs_desc or '' }}"></td>
+                        <td><input type="number" name="store_needs_{{ loop.index0 }}"
+                                value="{{ expense.store_needs or '' }}"></td>
+                        <td><input type="text" name="salary_desc_{{ loop.index0 }}"
+                                value="{{ expense.salary_desc or '' }}"></td>
+                        <td><input type="number" name="salary_{{ loop.index0 }}" value="{{ expense.salary or '' }}">
+                        </td>
+                        <td><input type="text" name="rent_desc_{{ loop.index0 }}" value="{{ expense.rent_desc or '' }}">
+                        </td>
+                        <td><input type="number" name="rent_{{ loop.index0 }}" value="{{ expense.rent or '' }}"></td>
+                        <td><input type="text" name="repair_desc_{{ loop.index0 }}"
+                                value="{{ expense.repair_desc or '' }}"></td>
+                        <td><input type="number" name="repair_{{ loop.index0 }}" value="{{ expense.repair or '' }}">
+                        </td>
+                        <td><input type="text" name="marketing_desc_{{ loop.index0 }}"
+                                value="{{ expense.marketing_desc or '' }}"></td>
+                        <td><input type="number" name="marketing_{{ loop.index0 }}"
+                                value="{{ expense.marketing or '' }}"></td>
+                        <td>
+                            <button type="button" style="background-color: red; color: white;"
+                                onclick="deleteRowFromServer(this, '{{ url_for('delete_expensee', shop_id=shop_id, expense_id=expense.id) }}')">
+                                Удалить
+                            </button>
+                        </td>
+                    </tr>
+                    {% endfor %}
+                </tbody>
+            </table>
+
+            <button type="button" onclick="addRow()">Добавить строку</button>
+            <button type="submit">Сохранить изменения</button>
+        </form>
+
+        <!-- Итоговые суммы -->
+        <h2>Итоговые суммы:</h2>
+        <p>Сумма закупок: {{ totals.purchase }} руб.</p>
+        <p>Сумма нужд магазина: {{ totals.store_needs }} руб.</p>
+        <p>Сумма зарплаты: {{ totals.salary }} руб.</p>
+        <p>Сумма аренды: {{ totals.rent }} руб.</p>
+        <p>Сумма ремонта: {{ totals.repair }} руб.</p>
+        <p>Сумма маркетинга: {{ totals.marketing }} руб.</p>
+
+        <p>
+            <a href="/">На главную</a> |
+            <a href="{{ url_for('shop_employees', shop_id=shop_id) }}">← Обратно в магазин</a>
+        </p>
+    </main>
+</body>
+
+</html>

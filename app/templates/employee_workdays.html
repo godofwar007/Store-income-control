@@ -1,46 +1,184 @@
-<h1>Рабочие дни сотрудника: {{ employee.name }}</h1>
+<!DOCTYPE html>
+<html lang="en">
 
-<!-- Форма выбора месяца -->
-<form method="GET" action="{{ url_for('employee_workdays', employee_id=employee.id) }}">
-    <label for="month">Выберите месяц:</label>
-    <input type="month" id="month" name="month" value="{{ selected_month }}">
-    <button type="submit">Показать</button>
-</form>
+<head>
+    <meta charset="UTF-8">
+    <title>Рабочие дни сотрудника</title>
 
-<!-- Таблица рабочих дней -->
-<form method="POST">
-    <table border="1">
-        <thead>
-            <tr>
-                <th>Дата</th>
-                {% for day in days %}
-                <th>{{ day.split('-')[-1] }}</th> <!-- Показываем только число -->
-                {% endfor %}
-                <th>Итого</th>
-            </tr>
-        </thead>
-        <tbody>
-            <tr>
-                <td>Работал</td>
-                {% for day in days %}
-                <td>
-                    <input type="checkbox" name="workdays" value="{{ day }}" {% if workdays.get(day) %} checked {% endif
-                        %}>
-                </td>
-                {% endfor %}
-                <td>
-                    {{ workdays.values() | sum }}
-                </td>
-            </tr>
-        </tbody>
-    </table>
-    <button type="submit">Сохранить</button>
+    <!-- Существующая ссылка на стили -->
+    <link rel="stylesheet" href="/static/styles.css">
 
-</form>
+    <!-- Подключаем шрифт (Open Sans) -->
+    <link rel="preconnect" href="https://fonts.googleapis.com" />
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+    <link href="https://fonts.googleapis.com/css2?family=Open+Sans:wght@400;600&display=swap" rel="stylesheet" />
 
-<a href="{{ url_for('index') }}">На главную</a>
+    <style>
+        /* Сброс базовых стилей */
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
 
-<button onclick="history.back()"
-    style="background-color: gray; color: white; padding: 10px; border: none; cursor: pointer;">
-    Назад
-</button>
+        body {
+            font-family: 'Open Sans', sans-serif;
+            background: linear-gradient(to right, #e9ecef, #f8f9fa);
+            color: #333;
+            line-height: 1.5;
+        }
+
+        main {
+            max-width: 95vw;
+            margin: 2rem auto;
+            padding: 0 1rem;
+        }
+
+        h1 {
+            font-size: 1.8rem;
+            font-weight: 600;
+            text-align: center;
+            margin-bottom: 1rem;
+        }
+
+        /* Форма выбора месяца */
+        form {
+            margin-bottom: 1.5rem;
+        }
+
+        label {
+            font-weight: 600;
+            margin-right: 0.5rem;
+        }
+
+        input[type="month"] {
+            padding: 0.3rem;
+            border: 1px solid #ced4da;
+            border-radius: 4px;
+            margin-right: 0.5rem;
+        }
+
+        /* Кнопка "Показать" и "Сохранить" */
+        form button[type="submit"] {
+            background-color: #6c757d;
+            color: #fff;
+            border: none;
+            padding: 0.5rem 1rem;
+            border-radius: 4px;
+            cursor: pointer;
+        }
+
+        form button[type="submit"]:hover {
+            background-color: #5a6268;
+        }
+
+        /* Таблица */
+        table {
+            width: 100%;
+            border-collapse: collapse;
+            margin-bottom: 1.5rem;
+        }
+
+        table,
+        th,
+        td {
+            border: 1px solid #dee2e6;
+        }
+
+        th,
+        td {
+            padding: 0.5rem;
+            text-align: center;
+            vertical-align: middle;
+        }
+
+        thead {
+            background-color: #f1f3f5;
+        }
+
+        /* Чекбоксы */
+        input[type="checkbox"] {
+            transform: scale(1.2);
+            margin: 0.2rem;
+        }
+
+        /* Кнопка "Сохранить" */
+        form button[type="submit"],
+        button[type="button"] {
+            background-color: #78c478;
+            /* менее яркий зелёный */
+            color: #fff;
+            border: none;
+            padding: 0.5rem 1rem;
+            border-radius: 4px;
+            cursor: pointer;
+            margin-left: 0.5rem;
+        }
+
+        button[type="submit"]:hover {
+            background-color: #66ae66;
+        }
+
+        /* Ссылки */
+        a {
+            color: #007bff;
+            text-decoration: none;
+        }
+
+        a:hover {
+            text-decoration: underline;
+        }
+
+        /* Отступ сверху для ссылки "На главную" */
+        .back-link {
+            display: inline-block;
+            margin-top: 1rem;
+        }
+    </style>
+</head>
+
+<body>
+    <main>
+        <h1>Рабочие дни сотрудника: {{ employee.name }}</h1>
+
+        <!-- Форма выбора месяца (GET) -->
+        <form method="GET" action="{{ url_for('employee_workdays', employee_id=employee.id) }}">
+            <label for="month">Выберите месяц:</label>
+            <input type="month" id="month" name="month" value="{{ selected_month }}">
+            <button type="submit">Показать</button>
+        </form>
+
+        <!-- Таблица рабочих дней (POST) -->
+        <form method="POST">
+            <table border="1">
+                <thead>
+                    <tr>
+                        <th>Дата</th>
+                        {% for day in days %}
+                        <th>{{ day.split('-')[-1] }}</th>
+                        {% endfor %}
+                        <th>Итого</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <tr>
+                        <td>Работал</td>
+                        {% for day in days %}
+                        <td>
+                            <input type="checkbox" name="workdays" value="{{ day }}" {% if workdays.get(day) %} checked
+                                {% endif %}>
+                        </td>
+                        {% endfor %}
+                        <td>{{ workdays.values() | sum }}</td>
+                    </tr>
+                </tbody>
+            </table>
+            <button type="submit">Сохранить</button>
+        </form>
+        <a href="{{ url_for('index') }}" class="back-link">На главную</a>
+        <p><a href="{{ url_for('shop_employees', shop_id=shop_id) }}">Назад в магазин</a></p>
+
+    </main>
+</body>
+
+</html>

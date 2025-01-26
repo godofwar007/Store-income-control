@@ -1,5 +1,5 @@
 from flask_wtf import FlaskForm
-from wtforms import StringField, FloatField, SubmitField, DateField, IntegerField, SelectField
+from wtforms import StringField, FloatField, SubmitField, DateField, IntegerField, SelectField, HiddenField
 from wtforms.validators import DataRequired
 
 
@@ -10,6 +10,7 @@ class EmployeeForm(FlaskForm):
     salary = IntegerField('Ставка', default=0)
     motivation = IntegerField('Мотивация', default=0)
     total_salary = IntegerField('Общая зарплата', default=0)
+    month = HiddenField('Месяц')
     submit = SubmitField('Добавить')
 
 
@@ -24,3 +25,5 @@ class IncomeForm(FlaskForm):
     description = StringField('Описание', validators=[DataRequired()])
     date = DateField('Дата', validators=[DataRequired()], format='%Y-%m-%d')
     submit = SubmitField('Добавить')
+
+# новое

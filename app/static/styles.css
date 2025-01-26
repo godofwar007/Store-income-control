@@ -1,4 +1,217 @@
+/* ----------------------------
+   1. Reset & базовые стили
+----------------------------- */
+*,
+*::before,
+*::after {
+    box-sizing: border-box;
+    margin: 0;
+    padding: 0;
+}
+
+html,
 body {
+    height: 100%;
     font-family: Arial, sans-serif;
-    background-color: #ec2525;
+    background-color: #fafafa;
+    /* мягкий светло-серый фон */
+    color: #333;
+    line-height: 1.4;
+    padding: 1vw;
+}
+
+img,
+video {
+    max-width: 100%;
+    height: auto;
+}
+
+
+
+a {
+    text-decoration: none;
+    color: inherit;
+}
+
+/* ----------------------------
+   2. Цветовые переменные
+----------------------------- */
+:root {
+    --color-primary: #2C5EFF;
+    /* насыщенный синий */
+    --color-primary-light: #E6EEFF;
+    /* светлый оттенок синего для фона */
+    --color-secondary: #6c757d;
+    /* серый (для текста, вспомогательных элементов) */
+    --color-border: #d0d0d0;
+    /* светло-серый для границ */
+    --color-bg: #f8f9fa;
+    /* базовый фон */
+}
+
+/* ----------------------------
+   3. Глобальные отступы и контейнер
+----------------------------- */
+.container {
+    width: 90%;
+    max-width: 1200px;
+    margin: 0 auto;
+    padding: 1rem;
+}
+
+/* ----------------------------
+   4. Заголовки и текст
+----------------------------- */
+h1,
+h2,
+h3,
+h4,
+h5,
+h6 {
+    margin-bottom: 0.5rem;
+    font-weight: 600;
+    color: #222;
+}
+
+p {
+    margin-bottom: 1rem;
+    color: #444;
+}
+
+/* ----------------------------
+   5. Таблицы
+----------------------------- */
+.table-responsive {
+    width: 100%;
+    overflow-x: auto;
+    /* Горизонтальная прокрутка для маленьких экранов */
+    margin-bottom: 1.5rem;
+}
+
+table {
+    width: 100%;
+    border-collapse: collapse;
+    background-color: #fff;
+}
+
+thead {
+    background-color: var(--color-primary-light);
+}
+
+th,
+td {
+    padding: 0.75rem 1rem;
+    text-align: left;
+    border: 1px solid var(--color-border);
+    vertical-align: middle;
+}
+
+th {
+    font-weight: bold;
+    color: #333;
+}
+
+tbody tr:nth-child(even) {
+    background-color: #fdfdfd;
+    /* немного светлее для чередования */
+}
+
+tbody tr:hover {
+    background-color: #f1f1f1;
+    /* небольшое затемнение при ховере */
+}
+
+/* ----------------------------
+   6. Формы и поля ввода
+----------------------------- */
+form {
+    margin-bottom: 1.5rem;
+}
+
+label {
+    display: inline-block;
+    margin-bottom: 0.5rem;
+    font-weight: 500;
+}
+
+input[type="text"],
+input[type="email"],
+input[type="password"],
+input[type="number"],
+select,
+textarea {
+    width: 100%;
+    padding: 0.5rem;
+    border: 1px solid var(--color-border);
+    border-radius: 4px;
+    font-size: 1rem;
+    margin-bottom: 1rem;
+    background-color: #fff;
+    color: #333;
+}
+
+input:focus,
+select:focus,
+textarea:focus {
+    outline: none;
+    border-color: var(--color-primary);
+    box-shadow: 0 0 0 2px rgba(44, 94, 255, 0.2);
+}
+
+/* ----------------------------
+   7. Кнопки
+----------------------------- */
+.btn {
+    display: inline-block;
+    padding: 0.5rem 1rem;
+    font-size: 1rem;
+    font-weight: 500;
+    text-align: center;
+    cursor: pointer;
+    border: none;
+    border-radius: 4px;
+    transition: background-color 0.2s ease;
+}
+
+/* Основная синяя кнопка */
+.btn-primary {
+    background-color: var(--color-primary);
+    color: #fff;
+}
+
+.btn-primary:hover {
+    background-color: #1E46C0;
+    /* чуть затемняем */
+}
+
+/* Серая (вторичная) кнопка */
+.btn-secondary {
+    background-color: var(--color-secondary);
+    color: #fff;
+}
+
+.btn-secondary:hover {
+    background-color: #555;
+}
+
+/* ----------------------------
+   8. Адаптивность (медиа-запросы)
+----------------------------- */
+/* Примерно на телефонах до 576px */
+@media (max-width: 576px) {
+    .container {
+        padding: 0.5rem;
+    }
+
+    th,
+    td {
+        padding: 0.5rem;
+    }
+}
+
+/* Примерно планшеты до 768px */
+@media (max-width: 768px) {
+    h1 {
+        font-size: 1.5rem;
+    }
 }
