@@ -65,7 +65,7 @@
 | Экран | Предпросмотр |
 | ----- | ------------ |
 | Авторизация | [<img src="https://i.ibb.co/3mkfX13h/login.png" alt="Авторизация" width="400">](https://ibb.co/3mkfX13h) |
-| Общая статистика | [<img src="https://i.ibb.co/tgB03r3/dashboard.png" alt="Дашборд" width="400">](https://ibb.co/tgB03r3) |
+| Общая статистика | [<img src="https://i.ibb.co/2YjvhTnR/image.png" alt="Дашборд" width="400">](https://ibb.co/tgB03r3) |
 | Контроль рабочего времени | [<img src="https://i.ibb.co/1tKNVRw6/workdays.png" alt="Workdays" width="400">](https://ibb.co/1tKNVRw6) |
 | Продажи и возвраты | [<img src="https://i.ibb.co/7NSFSxt4/sales.png" alt="Продажи и возвраты" width="400">](https://ibb.co/7NSFSxt4) |
 | Учёт расходов | [<img src="https://i.ibb.co/vxC66Kc9/expenses.png" alt="Расходы" width="400">](https://ibb.co/vxC66Kc9) |
