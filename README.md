@@ -62,13 +62,25 @@
 
 ## 🖼️ Скриншоты (кликабельны)
 
-| Экран | Предпросмотр |
-| ----- | ------------ |
-| Авторизация | [<img src="https://i.ibb.co/3mkfX13h/login.png" alt="Авторизация" width="400">](https://ibb.co/3mkfX13h) |
-| Общая статистика | [<img src="https://i.ibb.co/2YjvhTnR/image.png" alt="Дашборд" width="400">](https://i.ibb.co/2YjvhTnR/image.png) |
-| Контроль рабочего времени | [<img src="https://i.ibb.co/1tKNVRw6/workdays.png" alt="Workdays" width="400">](https://ibb.co/1tKNVRw6) |
-| Продажи и возвраты | [<img src="https://i.ibb.co/7NSFSxt4/sales.png" alt="Продажи и возвраты" width="400">](https://ibb.co/7NSFSxt4) |
-| Учёт расходов | [<img src="https://i.ibb.co/vxC66Kc9/expenses.png" alt="Расходы" width="400">](https://ibb.co/vxC66Kc9) |
-| Рабочие дни сотрудника | [<img src="https://i.ibb.co/VYjjcGkZ/employee-days.png" alt="Рабочие дни" width="400">](https://ibb.co/VYjjcGkZ) |
-| Список сотрудников | [<img src="https://i.ibb.co/B2PkWJJH/employees.png" alt="Сотрудники" width="400">](https://ibb.co/B2PkWJJH) |
+## Скриншоты интерфейса
 
+### Авторизация
+![Авторизация](https://i.ibb.co/3mkfX13h/login.png)
+
+### Общая статистика
+![Дашборд](https://i.ibb.co/2YjvhTnR/image.png)
+
+### Контроль рабочего времени
+![Контроль рабочего времени](https://i.ibb.co/1tKNVRw6/workdays.png)
+
+### Продажи и возвраты
+![Продажи и возвраты](https://i.ibb.co/7NSFSxt4/sales.png)
+
+### Учёт расходов
+![Расходы](https://i.ibb.co/vxC66Kc9/expenses.png)
+
+### Рабочие дни сотрудника
+![Рабочие дни](https://i.ibb.co/VYjjcGkZ/employee-days.png)
+
+### Список сотрудников
+![Сотрудники](https://i.ibb.co/B2PkWJJH/employees.png)
