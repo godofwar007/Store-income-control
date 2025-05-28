@@ -1,11 +1,10 @@
-from flask import Flask, render_template, redirect, url_for, request, jsonify, Blueprint, flash
+from flask import Flask, render_template, redirect, url_for, request, flash
 from app.models import db, Shop, Employee, Income, Expense, Workday, Return, SalesReturn, ShopExpense
-from app.forms import EmployeeForm, ShopForm, IncomeForm
+from app.forms import EmployeeForm
 from datetime import datetime, date, timedelta
 from calendar import monthrange
 from sqlalchemy import text, func, asc, desc
-from jinja2 import Environment, FileSystemLoader
-from flask_login import login_user, logout_user, login_required, current_user
+from flask_login import login_required, current_user
 from .auth import auth_bp
 import calendar
 
@@ -386,7 +385,7 @@ def init_routes(app: Flask):
 
         # Получаем текущий месяц и год
         now = datetime.now()
-        current_year = now.year
+
         current_month = now.strftime('%Y-%m')
 
         # Получаем выбранный месяц из запроса или используем текущий

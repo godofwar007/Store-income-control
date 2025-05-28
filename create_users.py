@@ -1,12 +1,9 @@
 from app import create_app, db
 from app.models import User, bcrypt
 
-# Создаём приложение
 app = create_app()
 
-# Контекст приложения для работы с базой данных
 with app.app_context():
-    # Добавление пользователей
     users = [
         {"username": "shop1_manager", "password": "Sun12345",
             "access_level": "shop_manager", "shop_id": 1},

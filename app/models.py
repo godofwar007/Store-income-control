@@ -2,8 +2,9 @@ from app import db
 from datetime import datetime
 from flask_bcrypt import Bcrypt
 from flask_login import UserMixin
-# Модель для магазинов
 
+
+# Модель для магазинов
 
 class Shop(db.Model):
     id = db.Column(db.Integer, primary_key=True)
@@ -61,7 +62,6 @@ class Return(db.Model):
     id = db.Column(db.Integer, primary_key=True)
     shop_id = db.Column(db.Integer, db.ForeignKey('shop.id'), nullable=False)
     date = db.Column(db.Date, default=datetime.utcnow, nullable=False)
-    # Наименование товара
     item_name = db.Column(db.String(100), nullable=False)
     employee_id = db.Column(db.Integer, db.ForeignKey(
         'employee.id'), nullable=False)
