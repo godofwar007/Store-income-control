@@ -72,17 +72,3 @@
 | Рабочие дни сотрудника | [<img src="https://i.ibb.co/VYjjcGkZ/employee-days.png" alt="Рабочие дни" width="400">](https://ibb.co/VYjjcGkZ) |
 | Список сотрудников | [<img src="https://i.ibb.co/B2PkWJJH/employees.png" alt="Сотрудники" width="400">](https://ibb.co/B2PkWJJH) |
 
-> ⚠️ **Примечание:**  
-> Если изображения не отображаются, убедитесь, что используете прямые ссылки вида `https://i.ibb.co/.../filename.png`.  
-> Ссылки выше можно заменить на локальные файлы (`docs/screenshots/...`) при размещении в репозитории.
-
----
-
-## 📂 Быстрый старт
-
-```bash
-git clone https://github.com/your-org/your-repo.git
-cd your-repo
-python -m venv venv && source venv/bin/activate
-pip install -r requirements.txt
-flask run   # приложение доступно на http://localhost:5000
