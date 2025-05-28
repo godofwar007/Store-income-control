@@ -65,22 +65,22 @@
 ## Скриншоты интерфейса
 
 ### Авторизация
-![Авторизация](https://i.ibb.co/3mkfX13h/login.png)
+![Авторизация](https://i.ibb.co/fdQ8RMg0/image.png)
 
 ### Общая статистика
-![Дашборд](https://i.ibb.co/2YjvhTnR/image.png)
+![Общая статистика](https://i.ibb.co/2YjvhTnR/image.png)
 
-### Контроль рабочего времени
-![Контроль рабочего времени](https://i.ibb.co/1tKNVRw6/workdays.png)
-
-### Продажи и возвраты
-![Продажи и возвраты](https://i.ibb.co/7NSFSxt4/sales.png)
-
-### Учёт расходов
-![Расходы](https://i.ibb.co/vxC66Kc9/expenses.png)
+### Список всех сотрудников
+![Список всех сотрудников](https://i.ibb.co/VYN6nGG0/image.png)
 
 ### Рабочие дни сотрудника
-![Рабочие дни](https://i.ibb.co/VYjjcGkZ/employee-days.png)
+![Рабочие дни сотрудника](https://i.ibb.co/wh00Fq2X/image.png)
 
-### Список сотрудников
-![Сотрудники](https://i.ibb.co/B2PkWJJH/employees.png)
+### Учёт расходов магазина
+![Учёт расходов магазина](https://i.ibb.co/SXD4496S/image.png)
+
+### Продажи и возвраты магазина
+![Продажи и возвраты магазина](https://i.ibb.co/jZ8F89kR/image.png)
+
+### Список сотрудников магазина
+![Список сотрудников магазина](https://i.ibb.co/8L2w3PSc/image.png)
